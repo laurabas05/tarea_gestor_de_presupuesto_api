@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor de gastos</title>
+    <link rel="stylesheet" href="css/estilos.css">
+    <script type="module" src="js/gestionPresupuestoWebV2.js" defer></script>
+</head>
+
+<body>
+
+    <div id="aplicacion">
+        <h1>Gestor de Gastos</h1>
+
+        <div id="cargarUsuario">
+            <h2>Cargar usuario</h2>
+            <form id="formUsuario">
+                <input type="text" id="usuarioInput" placeholder="usuario1, usuario2..." required>
+                <button type="submit">Cargar</button>
+            </form>
+        </div>
+
+        <div id="totalGastos">
+            <h2>Total de gastos</h2>
+            <p id="total"></p>
+        </div>
+
+        <div id="formularioGastos">
+            <h2>Crear nuevo gasto</h2>
+        </div>
+
+        <div id="listadoGastos">
+            <h2>Listado de gastos</h2>
+        </div>
+    </div>
+
+    <template id="plantilla-gasto">
+        <div class="gasto">
+            <div class="gasto-descripcion" id="descripcion"></div>
+            <div class="gasto-valor" id="valor"></div>
+            <div class="gasto-fecha" id="fecha"></div>
+            <div class="gasto-etiquetas" id="etiquetas"></div>
+
+            <button id="borrar">Borrar</button>
+            <button id="editar">Editar</button>
+
+            <form id="formulario-filtrado" style="display:none">
+                <div class="form-control">
+                    <label for="nuevaDescripcion">Descripción:</label>
+                    <input type="text" id="nuevaDescripcion">
+                </div>
+                <div class="form-control">
+                    <label for="nuevoValor">Valor:</label>
+                    <input type="number" id="nuevoValor" step="0.01">
+                </div>
+                <div class="form-control">
+                    <label for="nuevaFecha">Fecha:</label>
+                    <input type="date" id="nuevaFecha">
+                </div>
+                <button type="submit" class="gasto-editar-formulario">Guardar</button>
+                <button type="button" id="cancelar">Cancelar</button>
+            </form>
+        </div>
+    </template>
+
+    <button id="guardar">Guardar gastos</button>
+    <button id="recuperar">Recuperar gastos</button>
+
+</body>
+
+</html>
