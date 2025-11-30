@@ -1,15 +1,17 @@
 import {
-    mostrarPresupuesto,
-    actualizarPresupuesto,
-    CrearGasto,
     listarGastos,
-    anyadirGasto,
-    borrarGasto,
+    cargarGastosDesdeAPI,
     calcularTotalGastos,
-    calcularBalance,
-    filtrarGastos,
-    agruparGastos
-} from './gestionPresupuesto.js';
+} from './gestionPresupuestoAPI.js';
+
+import {
+    obtenerGastosUsuario,
+    crearGastoAPI,
+    actualizarGastoAPI,
+    borrarGastoAPI
+} from './apiGastos.js';
+
+let usuarioActual = null;
 
 // declaro los contenedores q vamos a modificar
 const contenedorFormulario = document.getElementById("formularioGastos");
@@ -79,7 +81,7 @@ function crearFormularioGasto() {
     contenedorFormulario.appendChild(form);
 
     // funcion para evitar q se recargue la pagina al enviar el formulario
-    form.addEventListener("submit", (event) => {
+    form.addEventListener("submit", async (event) => {
         event.preventDefault();
 
         const descripcion = inputDescripcion.value;
@@ -91,8 +93,16 @@ function crearFormularioGasto() {
 
         // no queremos q se recargue la pagina porq queremos mostrar
         // dinámicamente los objetos gasto que vayamos creando
-        const nuevoGasto = new CrearGasto(descripcion, valor, fecha, ...etiquetas);
-        anyadirGasto(nuevoGasto);
+        const gastoPlano = {
+            descripcion,
+            valor,
+            fecha: fecha || Date.now(),
+            etiquetas
+        };
+        await crearGastoAPI(usuarioActual, gastoPlano);
+
+        const datos = await obtenerGastosUsuario(usuarioActual);
+        cargarGastosDesdeAPI(datos);
 
         actualizarListado();
 
@@ -310,13 +320,20 @@ class MiGasto extends HTMLElement {
         });
 
         // obtenemos los botones d la template
-        const botonBorrar = this.shadowRoot.querySelector("#borrar");
-        const botonEditar = this.shadowRoot.querySelector("#editar");
-        const formEdicion = this.shadowRoot.querySelector("#formulario-filtrado");
+        const botonBorrar = this.shadowRoot.querySelector(".borrar");
+        const botonEditar = this.shadowRoot.querySelector(".editar");
+        const formEdicion = this.shadowRoot.querySelector(".formulario-filtrado");
+        const botonGuardarEdicion = this.shadowRoot.querySelector(".gasto-editar-formulario");
 
         // botonBorrar: se borra un gasto pasando el id del gasto y se actualiza la vista
-        botonBorrar.onclick = () => {
-            borrarGasto(this._gasto.id);
+        botonBorrar.onclick = async (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const usuario = document.getElementById("usuarioInput").value;
+            await borrarGastoAPI(usuario, this._gasto.id);
+            const datos = await obtenerGastosUsuario(usuario);
+            cargarGastosDesdeAPI(datos);
+
             actualizarListado();
         };
 
@@ -333,8 +350,9 @@ class MiGasto extends HTMLElement {
         };
 
         // evita la recarga cuando se envie el formulario de edicion
-        formEdicion.onsubmit = (event) => {
+        botonGuardarEdicion.onclick = async (event) => {
             event.preventDefault();
+            event.stopPropagation();
             // lee los nuevos valores q hemos editado
             const desc = this.shadowRoot.querySelector("#nuevaDescripcion").value;
             const val = parseFloat(
@@ -345,13 +363,21 @@ class MiGasto extends HTMLElement {
             this._gasto.descripcion = desc;
             this._gasto.valor = val;
             this._gasto.fecha = fec;
+
+            await actualizarGastoAPI(usuarioActual, this._gasto);
+
+            const datos = await obtenerGastosUsuario(usuarioActual);
+            cargarGastosDesdeAPI(datos);
+
             // se oculta el form de edicion y se actualiza la vista
             formEdicion.style.display = "none";
             actualizarListado();
         };
 
         // el boton cancelar simplemente oculta el form de edicion
-        this.shadowRoot.querySelector("#cancelar").onclick = () => {
+        this.shadowRoot.querySelector("#cancelar").onclick = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
             formEdicion.style.display = "none";
         };
     }
@@ -365,6 +391,8 @@ function actualizarListado() {
     contenedorListado.innerHTML = "";
     const gastos = listarGastos();
 
+    console.log("ACTUALIZAR LISTADO EJECUTADO");
+    console.log("LISTADO:", listarGastos());
     // para cada gasto se crea y añade un componente 'mi-gasto'
     gastos.forEach((gasto) => {
         const elemento = document.createElement("mi-gasto");
@@ -378,8 +406,9 @@ function actualizarListado() {
 }
 
 crearFormularioGasto();
-actualizarListado();
+// actualizarListado();
 
+/*
 // CÓDIGO DE LA VERSIÓN 3
 // defino la clave en la q guardaré los datos
 const GASTOS_ALMACENADOS = "gastos";
@@ -422,3 +451,13 @@ const botonRecuperarGastos = document.getElementById("recuperar");
 
 botonGuardarGastos.addEventListener("click", guardarEnLocalStorage);
 botonRecuperarGastos.addEventListener("click", recuperarDeLocalStorage);
+*/
+
+document.getElementById("botonUsuario").onclick = async (e) => {
+    e.preventDefault();
+    usuarioActual = document.getElementById("usuarioInput").value;
+
+    const datos = await obtenerGastosUsuario(usuarioActual);
+    cargarGastosDesdeAPI(datos);
+    actualizarListado();
+};

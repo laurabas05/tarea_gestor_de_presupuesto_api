@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestor de gastos</title>
     <link rel="stylesheet" href="css/estilos.css">
-    <script type="module" src="js/gestionPresupuestoWebV2.js" defer></script>
+    <script type="module" src="gestionPresupuestoWebV2.js" defer></script>
 </head>
 
 <body>
@@ -18,7 +18,7 @@
             <h2>Cargar usuario</h2>
             <form id="formUsuario">
                 <input type="text" id="usuarioInput" placeholder="usuario1, usuario2..." required>
-                <button type="submit">Cargar</button>
+                <button type="button" id="botonUsuario">Cargar</button>
             </form>
         </div>
 
@@ -43,10 +43,10 @@
             <div class="gasto-fecha" id="fecha"></div>
             <div class="gasto-etiquetas" id="etiquetas"></div>
 
-            <button id="borrar">Borrar</button>
-            <button id="editar">Editar</button>
+            <button class="borrar" type="button">Borrar</button>
+            <button class="editar" type="button">Editar</button>
 
-            <form id="formulario-filtrado" style="display:none">
+            <form class="formulario-filtrado" style="display:none">
                 <div class="form-control">
                     <label for="nuevaDescripcion">Descripción:</label>
                     <input type="text" id="nuevaDescripcion">
@@ -59,7 +59,7 @@
                     <label for="nuevaFecha">Fecha:</label>
                     <input type="date" id="nuevaFecha">
                 </div>
-                <button type="submit" class="gasto-editar-formulario">Guardar</button>
+                <button type="button" class="gasto-editar-formulario">Guardar</button>
                 <button type="button" id="cancelar">Cancelar</button>
             </form>
         </div>
