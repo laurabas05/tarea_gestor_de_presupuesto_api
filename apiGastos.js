@@ -22,7 +22,7 @@ async function crearGastoAPI(usuario, gasto) {
 
     if (!respuesta.ok) throw new Error("Error al crear gasto");
 
-    return respuesta.json();
+    return;
 }
 
 // metodo delete
@@ -45,7 +45,7 @@ async function actualizarGastoAPI(usuario, gasto) {
 
     if (!respuesta.ok) throw new Error("Error al actualizar gasto");
 
-    return respuesta.json();
+    return;
 }
 
 export {
