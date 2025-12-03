@@ -17,7 +17,7 @@
         <div id="cargarUsuario">
             <h2>Cargar usuario</h2>
             <form id="formUsuario">
-                <input type="text" id="usuarioInput" placeholder="usuario1, usuario2..." required>
+                <input type="text" id="usuarioInput" required>
                 <button type="button" id="botonUsuario">Cargar</button>
             </form>
         </div>
@@ -43,10 +43,10 @@
             <div class="gasto-fecha" id="fecha"></div>
             <div class="gasto-etiquetas" id="etiquetas"></div>
 
-            <button class="borrar" type="button">Borrar</button>
-            <button class="editar" type="button">Editar</button>
+            <button id="borrar" type="button">Borrar</button>
+            <button id="editar" type="button">Editar</button>
 
-            <form class="formulario-filtrado" style="display:none">
+            <form id="formulario-filtrado" style="display:none">
                 <div class="form-control">
                     <label for="nuevaDescripcion">Descripción:</label>
                     <input type="text" id="nuevaDescripcion">
@@ -59,15 +59,11 @@
                     <label for="nuevaFecha">Fecha:</label>
                     <input type="date" id="nuevaFecha">
                 </div>
-                <button type="button" class="gasto-editar-formulario">Guardar</button>
+                <button type="button" id="gasto-editar-formulario">Guardar</button>
                 <button type="button" id="cancelar">Cancelar</button>
             </form>
         </div>
     </template>
-
-    <button id="guardar">Guardar gastos</button>
-    <button id="recuperar">Recuperar gastos</button>
-
 </body>
 
 </html>

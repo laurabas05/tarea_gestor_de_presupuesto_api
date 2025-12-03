@@ -4,7 +4,7 @@
 // array q contendrá los gastos del usuario
 let gastos = [];
 
-// coger los datos recibidos de la api y almacenarlos en el array gastos
+// coger los datos recibidos y almacenarlos en el array gastos
 function cargarGastosDesdeAPI(datos) {
     // se transforma cada objeto de los datos de la api
     gastos = datos.map(gasto => ({
