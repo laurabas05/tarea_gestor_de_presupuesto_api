@@ -226,17 +226,17 @@ class MiGasto extends HTMLElement {
         })
 
         // botonBorrar: se borra un gasto pasando el id del gasto y se actualiza la vista
-        botonBorrar.onclick = async (event) => {
+        botonBorrar.addEventListener('click', async (event) => {
             event.preventDefault();
             event.stopPropagation();
 
             // llamo a la api para borrar
             await borrarGastoAPI(usuarioActual, this._gasto.id);
             await recargarDatos();
-        };
+        });
 
         // botonEditar: muestra el formulario d edicion
-        botonEditar.onclick = (event) => {
+        botonEditar.addEventListener('click', (event) => {
             event.preventDefault();
             event.stopPropagation();
 
@@ -248,10 +248,10 @@ class MiGasto extends HTMLElement {
             desc.value = this._gasto.descripcion;
             val.value = this._gasto.valor;
             fec.value = this._gasto.fecha;
-        };
+        });
 
         // evita la recarga cuando se envie el formulario de edicion
-        botonGuardarEdicion.onclick = async (event) => {
+        botonGuardarEdicion.addEventListener('click', async (event) => {
             event.preventDefault();
             event.stopPropagation();
             // lee los nuevos valores q hemos editado
@@ -271,7 +271,7 @@ class MiGasto extends HTMLElement {
 
             // se oculta el form de edicion y se actualiza la vista
             formEdicion.style.display = "none";
-        };
+        });
 
         // el boton cancelar simplemente oculta el form de edicion
         botonCancelar.onclick = (event) => {
